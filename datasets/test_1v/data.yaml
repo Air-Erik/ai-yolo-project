@@ -1,0 +1,14 @@
+path: ../datasets/test_1v
+train: ../test_1v/train/images
+val: ../test_1v/valid/images
+test: ../test_1v/test/images
+
+nc: 4
+names: ['Kolodech', 'Kyst', 'Kyst_2', 'Otmetka']
+
+roboflow:
+  workspace: project-wwqou
+  project: -axlw0
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/project-wwqou/-axlw0/dataset/1
