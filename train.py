@@ -1,10 +1,10 @@
 from ultralytics import YOLO
 
 # Объявление модели
-model = YOLO("yolov5s.yaml")
+model = YOLO("yolov5m.yaml")
 
 # Обучение модели на наборе данных
-result = model.train(data='datasets/test_1v/data.yaml', epochs=10, imgsz=640)
+result = model.train(data='datasets/test_1v/data.yaml', epochs=30, imgsz=640)
 
 # Оценка качества тренировки модели на проверочном сете
 result = model.val()
