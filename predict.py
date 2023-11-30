@@ -1,12 +1,10 @@
 from ultralytics import YOLO
 from PIL import Image
-import cv2
-import torch
 
 # Загрузка модели для пердсказания
-model = YOLO("runs/detect/train3/weights/last.pt")
+model = YOLO("runs/detect/train3/weights/best.pt")
 
-results = model(['test2.jpg'])
+results = model(['test.jpg'])
 
 for r in results:
     im_array = r.plot()
