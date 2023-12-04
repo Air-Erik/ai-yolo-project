@@ -1,13 +1,12 @@
 from ultralytics import YOLO
-#import clearml
 
-#clearml.browser_login()
+def main():
+    # Объявление модели
+    model = YOLO("yolov5m.pt")
 
-# Объявление модели
-model = YOLO("yolov5m.pt")
+    # Обучение модели на наборе данных
+    result = model.train(data='datasets/test_1v/data.yaml', epochs=300, imgsz=640, freeze=10)
 
-# Обучение модели на наборе данных
-result = model.train(data='datasets/test_1v/data.yaml', epochs=100, imgsz=640)
-
-# Оценка качества тренировки модели на проверочном сете
-result = model.val()
+# Необходимое условие для многопоточности. Без данной конструкции не возможен параллелизм
+if __name__ == '__main__':
+    main()

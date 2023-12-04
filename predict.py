@@ -2,9 +2,9 @@ from ultralytics import YOLO
 from PIL import Image
 
 # Загрузка модели для пердсказания
-model = YOLO("runs/detect/train/weights/best.pt")
+model = YOLO("runs/detect/train4/weights/best.pt")
 
-results = model(['test3.jpg'])
+results = model(['test.jpg'])
 
 for r in results:
     im_array = r.plot()
