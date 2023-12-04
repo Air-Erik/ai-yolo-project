@@ -6,7 +6,8 @@ import pandas as pd
 # Загрузка модели для пердсказания
 model = YOLO("runs/detect/train3/weights/best.pt")
 
-results = model(['test/test1.jpg', 'test/test2.jpg'])
+# Предсказание. Параметр conf определяет достоверный порог вероятности при котором засчитывается обнаружение
+results = model(['test/test0.jpg', 'test/test1.jpg'], conf=0.7)
 
 i = 0
 
