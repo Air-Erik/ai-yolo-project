@@ -7,7 +7,7 @@ import pandas as pd
 model = YOLO("runs/detect/train3/weights/best.pt")
 
 # Предсказание. Параметр conf определяет достоверный порог вероятности при котором засчитывается обнаружение
-results = model(['test/test0.jpg', 'test/test1.jpg'], conf=0.7)
+results = model(['test/test_1v/test0.jpg', 'test/test_1v/test1.jpg'], conf=0.7)
 
 # Счетчик
 i = 0
