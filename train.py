@@ -1,7 +1,7 @@
 from ultralytics import YOLO
-import clearml
+#import clearml
 
-clearml.browser_login()
+#clearml.browser_login()
 
 # Объявление модели
 model = YOLO("yolov5m.pt")
