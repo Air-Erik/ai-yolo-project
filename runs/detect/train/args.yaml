@@ -1,6 +1,6 @@
 task: detect
 mode: train
-model: yolov5m.pt
+model: yolov5n.pt
 data: datasets/test_1v/data.yaml
 epochs: 100
 patience: 50
@@ -27,7 +27,7 @@ resume: false
 amp: true
 fraction: 1.0
 profile: false
-freeze: null
+freeze: 10
 overlap_mask: true
 mask_ratio: 4
 dropout: 0.0
