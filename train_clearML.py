@@ -5,11 +5,11 @@ def main():
     # ClearML; Создание объекта задачи для clearml, описывает проект и название текущей сессии
     task = Task.init(
         project_name="my_project",
-        task_name="yolov5s"
+        task_name="yolov8l"
     )
     
     # ClearML; Определение модели на которой будет происходить обучение
-    model_variant = "yolov5s"
+    model_variant = "yolov8l"
     task.set_parameter("model_variant", model_variant)
     
     # YOLO; Объявление модели

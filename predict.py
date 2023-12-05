@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 # Загрузка модели для пердсказания
-model = YOLO("runs/detect/train3/weights/best.pt")
+model = YOLO("runs/detect/train/weights/best.pt")
 
 # Предсказание. Параметр conf определяет достоверный порог вероятности при котором засчитывается обнаружение
 results = model(['test/test_1v/test0.jpg', 'test/test_1v/test1.jpg'], conf=0.7)
