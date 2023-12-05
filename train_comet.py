@@ -19,7 +19,7 @@ def main():
     experiment.log_parameters(hyper_params)
     
     # YOLO; Объявление модели
-    model = YOLO("yolov5m.pt")
+    model = YOLO("yolov5n.pt")
     
     # YOLO; Обучение модели на наборе данных
     result = model.train(data='datasets/test_1v/data.yaml', epochs=100, imgsz=640, freeze=10)
