@@ -1,5 +1,7 @@
 # AI datasets
 datasets/
+result/
+test/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

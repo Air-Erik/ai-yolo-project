@@ -26,10 +26,12 @@ def main():
     model = YOLO(f'{model_variant}.pt')
 
     # ClearML; Устанавка параметров обучения, передаются в функцию обучения
-    args = dict(data='datasets/AutoCAD_Topo_v7/data.yaml',
+    args = dict(data='datasets/AutoCAD_Topo_v8/data.yaml',
                 epochs=300,
                 imgsz=640,
-                freeze=10)
+                freeze=10,
+                patience=25
+            )
     task.connect(args)
 
     # YOLO; Обучение модели на наборе данных
