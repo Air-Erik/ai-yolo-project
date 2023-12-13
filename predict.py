@@ -5,7 +5,7 @@ import os
 
 # Название папки с обученными весами (название используется для вывода
 # результата)
-custom_weights = 'train4'
+custom_weights = 'train6'
 # Путь к папке с изображениями для тестирования
 pth_test = 'test/AutoCAD_Topo_v7/'
 
