@@ -51,7 +51,3 @@ for r in results:
     df.to_csv(f'result/{custom_weights}/data_{file_names[i]}.csv')
 
     i += 1  # Увеличение счетчика
-    '''
-    # Печать таблицы
-    print(df.head())
-    '''
