@@ -8,7 +8,7 @@ import psycopg
 # результата)
 custom_weights = 'train6'
 # Путь к папке с изображениями для тестирования 'test/AutoCAD_Topo_v7/'
-pth_test = 'test/test_1v/'
+pth_test = 'test/AutoCAD_Topo_v7/'
 
 # Загрузка модели для пердсказания
 model = YOLO(f"runs/detect/{custom_weights}/weights/best.pt")
