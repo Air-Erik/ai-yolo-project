@@ -50,17 +50,26 @@ for r in results:
     # Создание таблицы pandas с последующей выгрузкой в CSV
     df = pd.DataFrame(frames, columns=['x1', 'y1', 'x2', 'y2'])
     df['percent'], df['class'] = pd.DataFrame(percent), pd.DataFrame(clas)
+    # Приведение к типу float64 потому что postgreSQL ругается на тип
+    # данных float32
     df = df.astype('float64')
-    # df.to_csv(f'result/{custom_weights}/data_{file_names[i]}.csv')
 
     # Запись в базу данных
-    with psycopg.connect('dbname=ai_database user=ayrapetov_es password=1111') as conn:
+    with psycopg.connect('dbname=ai_database user=ayrapetov_es \
+    password=1111') as conn:
+
+        # Создание элемента курсора
         with conn.cursor() as cur:
 
+            # Перебор строк дата фрейма в цикле
             for index, row in df.iterrows():
+                # Отправка непосредственно SQL запроса
                 cur.execute(
-                    'INSERT INTO train (x_1, y_1, x_2, y_2, percent, file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                    (row['x1'], row['y1'], row['x2'], row['y2'], row['percent'], file_names[i], 'none', row['class']))
+                    'INSERT INTO train (x_1, y_1, x_2, y_2, percent, \
+                    file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, \
+                    %s, %s, %s)',
+                    (row['x1'], row['y1'], row['x2'], row['y2'],
+                     row['percent'], file_names[i], 'none', row['class']))
             cur.close()
 
         conn.commit()
