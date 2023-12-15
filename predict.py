@@ -50,6 +50,7 @@ for r in results:
     # Создание таблицы pandas с последующей выгрузкой в CSV
     df = pd.DataFrame(frames, columns=['x1', 'y1', 'x2', 'y2'])
     df['percent'], df['class'] = pd.DataFrame(percent), pd.DataFrame(clas)
+    df = df.astype('float64')
     # df.to_csv(f'result/{custom_weights}/data_{file_names[i]}.csv')
 
     # Запись в базу данных
@@ -59,8 +60,7 @@ for r in results:
             for index, row in df.iterrows():
                 cur.execute(
                     'INSERT INTO train (x_1, y_1, x_2, y_2, percent, file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                    (float(row['x1']), float(row['y1']), float(row['x2']), float(row['y2']),
-                    float(row['percent']), file_names[i], 'none', float(row['class'])))
+                    (row['x1'], row['y1'], row['x2'], row['y2'], row['percent'], file_names[i], 'none', row['class']))
             cur.close()
 
         conn.commit()
