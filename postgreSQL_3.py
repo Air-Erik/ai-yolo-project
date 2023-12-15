@@ -7,12 +7,8 @@ password=1111') as conn:
         cur.execute(
             'INSERT INTO new_table (class, class_id, x_1, y_1, x_2, y_2, \
             percent) VALUES (%s, %s, %s, %s, %s, %s, %s)',
-            ('well', 6, 20.1, 21.1, 2.1, 3.1, 80.25))
+            ('well', 10, 0.1, 1.1, 20.1, 30.1, 80.25))
 
-        cur.execute("SELECT * FROM new_table")
-        cur.fetchone()
-
-        for record in cur:
-            print(record)
+        conn.commit()
 
 print('yes')
