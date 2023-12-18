@@ -8,29 +8,29 @@ import yaml
 # Название папки с обученными весами (название используется для вывода
 # результата)
 custom_weights = 'train6'
-# Путь к папке с изображениями для тестирования
-pth_test = 'test/AutoCAD_Topo_v7/'
+# Путь к папке с изображениями для классификации
+pth_raw = 'test/AutoCAD_Topo_v7/'
 # Путь к папке с датасетом, для чтения названий классов
 pth_dataset = 'datasets/AutoCAD_Topo_v7/data.yaml'
 
 # Загрузка модели для пердсказания
 model = YOLO(f"runs/detect/{custom_weights}/weights/best.pt")
 
-# Создает список с путями ко всем файлам в папке pth_test
+# Создает список с путями ко всем файлам в папке pth_raw
 # Также создает список имен файлов без расширений. Он используется для вывода
 # результата
 source = []
 file_names = []
-for dirpath, dirnames, filenames in os.walk(pth_test):
+for dirpath, dirnames, filenames in os.walk(pth_raw):
     for filename in filenames:
         source.append(os.path.join(dirpath, filename))
         file_names.append(os.path.splitext(filename)[0])
 
 # Извлекает из датасета имена для классов
 with open(pth_dataset) as yaml_file:
-    read_data = yaml.load(yaml_file, Loader=yaml.FullLoader)
+    yaml_read_data = yaml.load(yaml_file, Loader=yaml.FullLoader)
 # Извлекает из словаря только имена класов
-class_names = read_data['names']
+class_names = yaml_read_data['names']
 
 # Предсказание. Параметр conf определяет достоверный порог вероятности при
 # котором засчитывается обнаружение
