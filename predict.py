@@ -64,11 +64,10 @@ query = sql.SQL('''
 # по подготовленому ранее запросу
 with psycopg.connect('dbname=ai_database user=ayrapetov_es \
 password=1111') as conn:
-    with conn.cursor() as cur:
-        try:
-            cur.execute(query)
-        except psycopg.errors.DuplicateTable:
-            pass
+    try:
+        conn.execute(query)
+    except psycopg.errors.DuplicateTable:
+        pass
 
 # Последовательная обработка результатов по каждому изображению
 for r in results:
@@ -96,36 +95,33 @@ for r in results:
     with psycopg.connect('dbname=ai_database user=ayrapetov_es \
     password=1111') as conn:
 
-        # Создание элемента курсора
-        with conn.cursor() as cur:
-            # Перебор строк дата фрейма в цикле
-            for index, row in df.iterrows():
-                # Отправка SQL запроса
-                cur.execute(
-                    sql.SQL('''
-                        INSERT INTO {} (
-                            x_1,
-                            y_1,
-                            x_2,
-                            y_2,
-                            percent,
-                            file_name,
-                            class,
-                            class_id)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                        ''').format(
-                            sql.Identifier(pth_raw)),
-                    (
-                        row['x1'],
-                        row['y1'],
-                        row['x2'],
-                        row['y2'],
-                        row['percent'],
-                        file_names[i],
-                        row['class'],
-                        row['class_id'])
-                    )
-            cur.close()
+        # Перебор строк дата фрейма в цикле
+        for index, row in df.iterrows():
+            # Отправка SQL запроса
+            conn.execute(
+                sql.SQL('''
+                    INSERT INTO {} (
+                        x_1,
+                        y_1,
+                        x_2,
+                        y_2,
+                        percent,
+                        file_name,
+                        class,
+                        class_id)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    ''').format(
+                        sql.Identifier(pth_raw)),
+                (
+                    row['x1'],
+                    row['y1'],
+                    row['x2'],
+                    row['y2'],
+                    row['percent'],
+                    file_names[i],
+                    row['class'],
+                    row['class_id'])
+                )
 
         conn.commit()
 
