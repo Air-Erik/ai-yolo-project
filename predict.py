@@ -3,12 +3,15 @@ from PIL import Image
 import pandas as pd
 import os
 import psycopg
+import yaml
 
 # Название папки с обученными весами (название используется для вывода
 # результата)
 custom_weights = 'train6'
-# Путь к папке с изображениями для тестирования 'test/AutoCAD_Topo_v7/'
+# Путь к папке с изображениями для тестирования
 pth_test = 'test/AutoCAD_Topo_v7/'
+# Путь к папке с датасетом, для чтения названий классов
+pth_dataset = 'datasets/AutoCAD_Topo_v7/data.yaml'
 
 # Загрузка модели для пердсказания
 model = YOLO(f"runs/detect/{custom_weights}/weights/best.pt")
@@ -23,12 +26,17 @@ for dirpath, dirnames, filenames in os.walk(pth_test):
         source.append(os.path.join(dirpath, filename))
         file_names.append(os.path.splitext(filename)[0])
 
-print(file_names)
+# Извлекает из датасета имена для классов
+with open(pth_dataset) as yaml_file:
+    read_data = yaml.load(yaml_file, Loader=yaml.FullLoader)
+# Извлекает из словаря только имена класов
+class_names = read_data['names']
+
 # Предсказание. Параметр conf определяет достоверный порог вероятности при
 # котором засчитывается обнаружение
 results = model(source, conf=0.70)
 
-# Счетчик
+# Счетчик нужен для обработки нескольких изображений
 i = 0
 
 # Создание директории для вывода результатов
@@ -49,10 +57,13 @@ for r in results:
 
     # Создание таблицы pandas с последующей выгрузкой в CSV
     df = pd.DataFrame(frames, columns=['x1', 'y1', 'x2', 'y2'])
-    df['percent'], df['class'] = pd.DataFrame(percent), pd.DataFrame(clas)
+    df['percent'], df['class_id'] = pd.DataFrame(percent), pd.DataFrame(clas)
     # Приведение к типу float64 потому что postgreSQL ругается на тип
     # данных float32
     df = df.astype('float64')
+    # Заполняет название классов
+    for j in df['class_id']:
+        df.loc[df['class_id'] == j, 'class'] = class_names[int(j)]
 
     # Запись в базу данных
     with psycopg.connect('dbname=ai_database user=ayrapetov_es \
@@ -63,13 +74,13 @@ for r in results:
 
             # Перебор строк дата фрейма в цикле
             for index, row in df.iterrows():
-                # Отправка непосредственно SQL запроса
+                # Отправка SQL запроса
                 cur.execute(
                     'INSERT INTO train (x_1, y_1, x_2, y_2, percent, \
                     file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, \
                     %s, %s, %s)',
                     (row['x1'], row['y1'], row['x2'], row['y2'],
-                     row['percent'], file_names[i], 'none', row['class']))
+                     row['percent'], file_names[i], row['class'], row['class_id']))
             cur.close()
 
         conn.commit()
