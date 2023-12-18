@@ -48,7 +48,6 @@ if not os.path.exists(f'result/{custom_weights}'):
 # Подготвока SQL запроса по которому будет создавать таблица
 query = sql.SQL('''
     CREATE TABLE {} (
-        id serial PRIMARY KEY,
         x_1 numeric,
         y_1 numeric,
         x_2 numeric,
@@ -58,7 +57,7 @@ query = sql.SQL('''
         class text,
         class_id numeric)
     ''').format(
-        sql.Identifier(custom_weights)
+        sql.Identifier(pth_raw)
         )
 
 # Создание таблицы в базе данных для записи результатов работы программы
@@ -102,10 +101,10 @@ for r in results:
             # Перебор строк дата фрейма в цикле
             for index, row in df.iterrows():
                 # Отправка SQL запроса
-                cur.execute('''
-                    INSERT INTO train (x_1, y_1, x_2, y_2, percent, \
+                cur.execute(sql.SQL('''
+                    INSERT INTO {} (x_1, y_1, x_2, y_2, percent, \
                     file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, \
-                    %s, %s, %s)''',
+                    %s, %s, %s)''').format(sql.Identifier(pth_raw)),
                     (row['x1'], row['y1'], row['x2'], row['y2'],
                      row['percent'], file_names[i], row['class'], row['class_id']))
             cur.close()
