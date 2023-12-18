@@ -3,7 +3,9 @@ from PIL import Image
 import pandas as pd
 import os
 import psycopg
+from psycopg import sql
 import yaml
+
 
 # Название папки с обученными весами (название используется для вывода
 # результата)
@@ -29,7 +31,7 @@ for dirpath, dirnames, filenames in os.walk(pth_raw):
 # Извлекает из датасета имена для классов
 with open(pth_dataset) as yaml_file:
     yaml_read_data = yaml.load(yaml_file, Loader=yaml.FullLoader)
-# Извлекает из словаря только имена класов
+# Извлекает из словаря только имена классов
 class_names = yaml_read_data['names']
 
 # Предсказание. Параметр conf определяет достоверный порог вероятности при
@@ -42,6 +44,32 @@ i = 0
 # Создание директории для вывода результатов
 if not os.path.exists(f'result/{custom_weights}'):
     os.mkdir(f'result/{custom_weights}')
+
+# Подготвока SQL запроса по которому будет создавать таблица
+query = sql.SQL('''
+    CREATE TABLE {} (
+        id serial PRIMARY KEY,
+        x_1 numeric,
+        y_1 numeric,
+        x_2 numeric,
+        y_2 numeric,
+        percent numeric,
+        file_name text,
+        class text,
+        class_id numeric)
+    ''').format(
+        sql.Identifier(custom_weights)
+        )
+
+# Создание таблицы в базе данных для записи результатов работы программы
+# по подготовленому ранее запросу
+with psycopg.connect('dbname=ai_database user=ayrapetov_es \
+password=1111') as conn:
+    with conn.cursor() as cur:
+        try:
+            cur.execute(query)
+        except:
+            pass
 
 # Последовательная обработка результатов по каждому изображению
 for r in results:
@@ -71,14 +99,13 @@ for r in results:
 
         # Создание элемента курсора
         with conn.cursor() as cur:
-
             # Перебор строк дата фрейма в цикле
             for index, row in df.iterrows():
                 # Отправка SQL запроса
-                cur.execute(
-                    'INSERT INTO train (x_1, y_1, x_2, y_2, percent, \
+                cur.execute('''
+                    INSERT INTO train (x_1, y_1, x_2, y_2, percent, \
                     file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, \
-                    %s, %s, %s)',
+                    %s, %s, %s)''',
                     (row['x1'], row['y1'], row['x2'], row['y2'],
                      row['percent'], file_names[i], row['class'], row['class_id']))
             cur.close()
