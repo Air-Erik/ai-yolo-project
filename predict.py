@@ -102,11 +102,28 @@ for r in results:
             for index, row in df.iterrows():
                 # Отправка SQL запроса
                 cur.execute(sql.SQL('''
-                    INSERT INTO {} (x_1, y_1, x_2, y_2, percent, \
-                    file_name, class, class_id) VALUES (%s, %s, %s, %s, %s, \
-                    %s, %s, %s)''').format(sql.Identifier(pth_raw)),
-                    (row['x1'], row['y1'], row['x2'], row['y2'],
-                     row['percent'], file_names[i], row['class'], row['class_id']))
+                    INSERT INTO {} (
+                        x_1,
+                        y_1,
+                        x_2,
+                        y_2,
+                        percent,
+                        file_name,
+                        class,
+                        class_id)
+                    VALUES (
+                        %s, %s, %s, %s, %s, %s, %s, %s)
+                    ''').format(
+                        sql.Identifier(pth_raw)),
+                            (row['x1'],
+                             row['y1'],
+                             row['x2'],
+                             row['y2'],
+                             row['percent'],
+                             file_names[i],
+                             row['class'],
+                             row['class_id'])
+                    )
             cur.close()
 
         conn.commit()
