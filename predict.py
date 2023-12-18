@@ -67,7 +67,7 @@ password=1111') as conn:
     with conn.cursor() as cur:
         try:
             cur.execute(query)
-        except:
+        except psycopg.errors.DuplicateTable:
             pass
 
 # Последовательная обработка результатов по каждому изображению
