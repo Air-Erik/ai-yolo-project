@@ -111,8 +111,7 @@ for r in results:
                         file_name,
                         class,
                         class_id)
-                    VALUES (
-                        %s, %s, %s, %s, %s, %s, %s, %s)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     ''').format(
                         sql.Identifier(pth_raw)),
                             (row['x1'],
