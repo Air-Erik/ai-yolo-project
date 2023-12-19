@@ -2,7 +2,7 @@ import pandas as pd
 import psycopg
 from psycopg import sql
 
-#Извлечение данных из базы данных и запись их в pandas DF
+# Извлечение информации из базы данных и запись их в pandas DF
 query = sql.SQL('SELECT * FROM "AutoCAD_Topo_v7"')
 
 data = []
