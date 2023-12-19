@@ -11,7 +11,8 @@ import yaml
 # результата)
 custom_weights = 'train6'
 # Путь к папке с изображениями для классификации
-pth_raw = 'test/AutoCAD_Topo_v7/'
+pth_raw = 'C:/Repos/Ayrapetov/02_ai-yolo-project/test/AutoCAD_Topo_v7/'
+pth = pth_raw.split('/')[-2:-1]
 # Путь к папке с датасетом, для чтения названий классов
 pth_dataset = 'datasets/AutoCAD_Topo_v7/data.yaml'
 
@@ -57,7 +58,7 @@ query = sql.SQL('''
         class text,
         class_id numeric)
     ''').format(
-        sql.Identifier(pth_raw)
+        sql.Identifier(*pth)
         )
 
 # Создание таблицы в базе данных для записи результатов работы программы
@@ -111,7 +112,7 @@ for r in results:
                         class_id)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     ''').format(
-                        sql.Identifier(pth_raw)),
+                        sql.Identifier(*pth)),
                 (
                     row['x1'],
                     row['y1'],
