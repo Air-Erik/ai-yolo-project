@@ -5,7 +5,7 @@ password=1111') as conn:
     with conn.cursor() as cur:
 
         cur.execute(
-            'DELETE FROM test/AutoCAD_Topo_v7/'
+            'DELETE FROM "AutoCAD_Topo_v7"'
             )
         cur.close()
 
